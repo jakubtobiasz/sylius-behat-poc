@@ -70,7 +70,7 @@ jobs:
 
             -
                 name: Setup Playwright
-                uses: playwright-php/setup-playwright@v1
+                uses: playwright-php/setup-playwright@v1.0.0
                 with:
                     browsers: chromium
 
