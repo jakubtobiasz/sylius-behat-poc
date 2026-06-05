@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+ini_set('memory_limit', '512M');
+
+$GLOBALS['_composer_autoload_path'] = dirname(__DIR__) . '/vendor/autoload.php';
+
+require dirname(__DIR__) . '/vendor/sylius/test-application/bin/console';

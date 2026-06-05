@@ -3,9 +3,14 @@
 /composer.lock
 /.phpunit.result.cache
 /behat.yml
-/var/
+/var/*
+!/var/.gitkeep
+/node_modules/
 /.idea/
 /.vscode/
+
+/tests/TestApplication/.env.local
+/tests/TestApplication/.env.*.local
 
 # Specific AI directories – use symlinks based on .agents dir
 /.cursor/

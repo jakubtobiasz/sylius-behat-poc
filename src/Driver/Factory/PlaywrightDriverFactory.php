@@ -24,7 +24,6 @@ final class PlaywrightDriverFactory implements DriverFactory
     public function configure(ArrayNodeDefinition $builder): void
     {
         $builder
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('browser_type')
                     ->defaultValue('chromium')

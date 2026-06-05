@@ -1,20 +1,31 @@
 default:
+    calls:
+        error_reporting: 6143 # E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED
+
     suites:
         default:
+            paths:
+                - '%paths.base%/tests/TestApplication/features'
             contexts:
-                - Alphpaca\SyliusBehat\Context\PlaywrightSessionContext
+                - Alphpaca\SyliusBehat\Context\Setup\AdminSecurityContext
+                - Alphpaca\SyliusBehat\Context\Ui\Admin\DashboardContext
+                - Alphpaca\SyliusBehat\Context\Ui\Shop\HomepageContext
 
     extensions:
         Behat\MinkExtension:
             base_url: 'http://127.0.0.1:8000'
-            default_session: symfony
+            default_session: playwright
             javascript_session: playwright
             sessions:
-                symfony:
-                    symfony: ~
                 playwright:
                     playwright:
                         browser_type: chromium
                         headless: true
+
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: vendor/sylius/test-application/config/bootstrap.php
+            kernel:
+                class: Sylius\TestApplication\Kernel
+                environment: test
 
         Alphpaca\SyliusBehat\Extension\SyliusBehatExtension: ~
