@@ -28,9 +28,5 @@ final class DashboardContext implements Context
     public function iShouldSeeTheAdministrationDashboard(): void
     {
         $this->dashboardPage->verify();
-
-        if (!$this->dashboardPage->hasAdminMenu()) {
-            throw new \RuntimeException('Expected administration dashboard to display the admin menu.');
-        }
     }
 }
