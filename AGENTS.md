@@ -25,8 +25,8 @@ sylius-behat/
 │   └── Extension/            # Behat extension (registers playwright driver)
 ├── example/                  # Sylius consumer app ([Sylius/TestApplication](https://github.com/Sylius/TestApplication))
 ├── behat.yml.dist            # Minimal Behat + Mink example
+├── .agents/rules/            # Agent rules (COMMIT.md, PHPUNIT.md, …)
 ├── composer.json
-├── PHPUNIT.md                # PHPUnit rules for agents
 └── README.md
 ```
 
@@ -89,16 +89,22 @@ extensions:
 - Docker Compose, CI workflows, Packagist publish automation
 - Selenium2 / Panther driver support (Playwright only)
 
-## PHPUnit
+## Agent rules
 
-See [PHPUNIT.md](PHPUNIT.md). Key rule: **always** `$this->assert…`, never `self::assert…`.
+| Rule | Path |
+|------|------|
+| Commits | [.agents/rules/COMMIT.md](.agents/rules/COMMIT.md) |
+| PHPUnit | [.agents/rules/PHPUNIT.md](.agents/rules/PHPUNIT.md) |
+
+PHPUnit key rule: **always** `$this->assert…`, never `self::assert…`.
+
+Commit key rule: **no** `feat:` / `fix:` prefixes; subject **starts uppercase**.
 
 ## Conventions
 
 - `declare(strict_types=1);` on all PHP files
 - PSR-4 autoloading under `Alphpaca\SyliusBehat\`
 - MIT license
-- Conventional Commits for git messages
 
 ## Related packages
 
