@@ -1,0 +1,51 @@
+{
+    "name": "alphpaca/sylius-behat",
+    "description": "Sylius Behat contexts, pages, and steps powered by Playwright PHP",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "keywords": [
+        "alphpaca",
+        "behat",
+        "mink",
+        "playwright",
+        "sylius",
+        "testing"
+    ],
+    "authors": [
+        {
+            "name": "Jacob Tobiasz",
+            "email": "jacob@alphpaca.io"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "behat/behat": "^3.14",
+        "behat/mink": "^1.11",
+        "friends-of-behat/mink-extension": "^2.7",
+        "friends-of-behat/page-object-extension": "^0.3",
+        "friends-of-behat/symfony-extension": "^2.6",
+        "playwright-php/playwright": "^1.0",
+        "playwright-php/playwright-mink": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alphpaca\\SyliusBehat\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alphpaca\\SyliusBehat\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "playwright-install": "playwright-install --browsers"
+    }
+}

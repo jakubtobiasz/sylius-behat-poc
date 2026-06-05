@@ -1,0 +1,20 @@
+default:
+    suites:
+        default:
+            contexts:
+                - Alphpaca\SyliusBehat\Context\PlaywrightSessionContext
+
+    extensions:
+        Behat\MinkExtension:
+            base_url: 'http://127.0.0.1:8000'
+            default_session: symfony
+            javascript_session: playwright
+            sessions:
+                symfony:
+                    symfony: ~
+                playwright:
+                    playwright:
+                        browser_type: chromium
+                        headless: true
+
+        Alphpaca\SyliusBehat\Extension\SyliusBehatExtension: ~

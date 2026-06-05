@@ -1,0 +1,12 @@
+/vendor/
+/.phpunit.cache/
+/composer.lock
+/.phpunit.result.cache
+/behat.yml
+/var/
+/.idea/
+/.vscode/
+
+# Specific AI directories – use symlinks based on .agents dir
+/.cursor/
+/.claude/
