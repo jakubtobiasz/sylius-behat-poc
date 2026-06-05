@@ -1,0 +1,111 @@
+name: Build
+
+on:
+    push: ~
+    pull_request: ~
+    release:
+        types: [created]
+    workflow_dispatch: ~
+
+jobs:
+    behat:
+        runs-on: ubuntu-latest
+
+        name: "Behat (Symfony ${{ matrix.symfony }}, Test App ${{ matrix.test_application }}, PHP ${{ matrix.php }})"
+
+        timeout-minutes: 30
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -
+                        php: "8.2"
+                        symfony: "^6.4"
+                        test_application: "^1.14.0@alpha"
+                        database: "mariadb:11"
+                        node: "20.x"
+                    -
+                        php: "8.4"
+                        symfony: "^7.4"
+                        test_application: "^2.1.0@alpha"
+                        database: "mariadb:11"
+                        node: "20.x"
+
+        env:
+            APP_ENV: test
+
+        steps:
+            -
+                uses: actions/checkout@v4
+
+            -
+                name: Configure Composer
+                run: |
+                    composer global config --no-plugins allow-plugins.symfony/flex true
+                    composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.17 || ^2.0"
+                    composer config --no-plugins allow-plugins.symfony/flex true
+                    composer config --no-plugins allow-plugins.symfony/runtime true
+
+            -
+                name: Restrict Symfony version
+                run: composer config extra.symfony.require "${{ matrix.symfony }}"
+
+            -
+                name: Restrict Test Application version
+                run: composer require --dev "sylius/test-application:${{ matrix.test_application }}" --no-update --no-scripts --no-interaction
+
+            -
+                name: Build Sylius Test Application
+                uses: SyliusLabs/BuildTestAppAction@v4.3.0
+                with:
+                    database: ${{ matrix.database }}
+                    php_version: ${{ matrix.php }}
+                    symfony_version: ${{ matrix.symfony }}
+                    console_path: ../../bin/console
+                    composer_minimum_stability: alpha
+                    composer_prefer_stable: yes
+                    cache_key: "${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-test-app-${{ matrix.test_application }}-composer-${{ hashFiles('composer.json') }}"
+                    cache_restore_key: "${{ runner.os }}-php-${{ matrix.php }}-symfony-${{ matrix.symfony }}-test-app-${{ matrix.test_application }}-composer-"
+
+            -
+                name: Setup Playwright
+                uses: playwright-php/setup-playwright@v1
+                with:
+                    browsers: chromium
+
+            -
+                name: Setup Node
+                uses: actions/setup-node@v4
+                with:
+                    node-version: ${{ matrix.node }}
+
+            -
+                name: Install JS dependencies
+                run: yarn install
+                working-directory: vendor/sylius/test-application
+
+            -
+                name: Build JS assets
+                run: yarn build:prod
+                working-directory: vendor/sylius/test-application
+
+            -
+                name: Run webserver
+                run: symfony server:start --port=8000 --dir=vendor/sylius/test-application/public --daemon --no-tls
+
+            -
+                name: Run Behat
+                run: |
+                    vendor/bin/behat -c behat.yml.dist --colors --strict --no-interaction -vvv -f progress --tags="~@todo" || \
+                    vendor/bin/behat -c behat.yml.dist --colors --strict --no-interaction -vvv -f progress --tags="~@todo" --rerun
+
+            -
+                name: Upload Behat logs
+                uses: actions/upload-artifact@v4
+                if: failure()
+                with:
+                    name: "Behat logs - Symfony ${{ matrix.symfony }}, Test App ${{ matrix.test_application }}, PHP ${{ matrix.php }}"
+                    path: |
+                        var/log/
+                    if-no-files-found: ignore
