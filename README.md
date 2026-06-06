@@ -32,34 +32,49 @@ For CI, use [playwright-php/setup-playwright](https://github.com/playwright-php/
 
 ## Behat configuration
 
-Enable the extension and register a Playwright Mink session:
+Behat configuration is PHP-based (`behat.php` / `behat.dist.php`). Enable the extension and register a Playwright Mink session:
 
-```yaml
-# behat.yml
-default:
-    extensions:
-        Behat\MinkExtension:
-            base_url: '%env(string:SYLIUS_BEHAT_BASE_URL)%'
-            default_session: symfony
-            javascript_session: playwright
-            sessions:
-                symfony:
-                    symfony: ~
-                playwright:
-                    playwright:
-                        browser_type: chromium
-                        headless: true
+```php
+<?php
 
-        FriendsOfBehat\SymfonyExtension:
-            kernel:
-                environment: test
+declare(strict_types=1);
 
-        Alphpaca\SyliusBehat\Behat\SyliusBehatExtension: ~
+use Alphpaca\SyliusBehat\Behat\Extension\SyliusBehatExtension;
+use Behat\Config\Config;
+use Behat\Config\Extension;
+use Behat\Config\Profile;
+use Behat\MinkExtension\ServiceContainer\MinkExtension;
+use FriendsOfBehat\SymfonyExtension\ServiceContainer\SymfonyExtension;
+
+return (new Config())
+    ->withProfile(
+        (new Profile('default'))
+            ->withExtension(new Extension(MinkExtension::class, [
+                'base_url' => '%env(string:SYLIUS_BEHAT_BASE_URL)%',
+                'default_session' => 'symfony',
+                'javascript_session' => 'playwright',
+                'sessions' => [
+                    'symfony' => ['symfony' => null],
+                    'playwright' => [
+                        'playwright' => [
+                            'browser_type' => 'chromium',
+                            'headless' => true,
+                        ],
+                    ],
+                ],
+            ]))
+            ->withExtension(new Extension(SymfonyExtension::class, [
+                'kernel' => ['environment' => 'test'],
+            ]))
+            ->withExtension(new Extension(SyliusBehatExtension::class)),
+    );
 ```
+
+Register contexts as Symfony services tagged `fob.context_service`, then reference them by service id in suite definitions under `config/behat/suites/`.
 
 Tag scenarios that need a real browser with `@javascript`. Mink will switch to the `playwright` session automatically.
 
-See [`behat.yml.dist`](behat.yml.dist) for a minimal example.
+See [`behat.dist.php`](behat.dist.php) and [`config/behat/suites.php`](config/behat/suites.php) for a minimal example.
 
 ## Package layout
 

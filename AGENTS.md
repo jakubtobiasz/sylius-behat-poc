@@ -24,7 +24,8 @@ sylius-behat/
 │   ├── Driver/Factory/       # Playwright Mink driver factory
 │   └── Extension/            # Behat extension (registers playwright driver)
 ├── example/                  # Sylius consumer app ([Sylius/TestApplication](https://github.com/Sylius/TestApplication))
-├── behat.yml.dist            # Minimal Behat + Mink example
+├── behat.dist.php            # Minimal Behat + Mink example (PHP config)
+├── config/behat/suites/      # Sylius-style suite definitions (contexts, tag filters)
 ├── .agents/rules/            # Agent rules (COMMIT.md, PHPUNIT.md, …)
 ├── composer.json
 └── README.md
@@ -34,7 +35,7 @@ sylius-behat/
 
 ### Playwright driver registration
 
-- `Alphpaca\SyliusBehat\Behat\SyliusBehatExtension` registers `PlaywrightDriverFactory` with `Behat\MinkExtension` during `initialize()`.
+- `Alphpaca\SyliusBehat\Behat\Extension\SyliusBehatExtension` registers `PlaywrightDriverFactory` with `Behat\MinkExtension` during `initialize()`.
 - Driver key in Behat config: **`playwright`** (javascript-capable session).
 - Factory class: `Alphpaca\SyliusBehat\Driver\Factory\PlaywrightDriverFactory`.
 - Underlying driver: `Playwright\Mink\Driver\PlaywrightDriver`.
@@ -65,22 +66,7 @@ sylius-behat/
 
 ## Behat configuration (consumer)
 
-Consumers enable:
-
-```yaml
-extensions:
-    Behat\MinkExtension:
-        default_session: symfony
-        javascript_session: playwright
-        sessions:
-            symfony:
-                symfony: ~
-            playwright:
-                playwright:
-                    browser_type: chromium
-                    headless: true
-    Alphpaca\SyliusBehat\Behat\SyliusBehatExtension: ~
-```
+Consumers enable Playwright and this extension in `behat.php` / `behat.dist.php` (see [`behat.dist.php`](behat.dist.php)). Suite definitions live under `config/behat/suites/` and reference context service ids (for example `alphpaca.sylius_behat.admin.context.dashboard`).
 
 `@javascript` scenarios use the `playwright` session.
 

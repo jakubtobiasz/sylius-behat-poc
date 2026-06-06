@@ -30,7 +30,9 @@
         "playwright-php/playwright-mink": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0"
+        "friends-of-behat/suite-settings-extension": "^1.1",
+        "phpunit/phpunit": "^11.0",
+        "sylius/test-application": "^2.1.0@alpha"
     },
     "autoload": {
         "psr-4": {
@@ -46,6 +48,16 @@
         "sort-packages": true,
         "audit": {
             "block-insecure": false
+        },
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
+    },
+    "extra": {
+        "symfony": {
+            "require": "^7.4"
         }
     },
     "scripts": {

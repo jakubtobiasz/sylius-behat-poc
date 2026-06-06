@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Admin\Context\Ui;
+namespace Alphpaca\SyliusBehat\Admin\Context;
 
 use Alphpaca\SyliusBehat\Admin\Page\DashboardPage;
 use Behat\Behat\Context\Context;

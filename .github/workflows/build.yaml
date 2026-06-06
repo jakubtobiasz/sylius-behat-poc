@@ -97,8 +97,8 @@ jobs:
             -
                 name: Run Behat
                 run: |
-                    vendor/bin/behat -c behat.yml.dist --colors --strict --no-interaction -vvv -f progress --tags="~@todo" || \
-                    vendor/bin/behat -c behat.yml.dist --colors --strict --no-interaction -vvv -f progress --tags="~@todo" --rerun
+                    vendor/bin/behat -c behat.dist.php --colors --strict --no-interaction -vvv -f progress || \
+                    vendor/bin/behat -c behat.dist.php --colors --strict --no-interaction -vvv -f progress --rerun
 
             -
                 name: Upload Behat logs

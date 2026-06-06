@@ -1,0 +1,131 @@
+version: '3'
+
+vars:
+  TEST_APP_DIR: vendor/sylius/test-application
+  BEHAT_CONFIG: behat.dist.php
+  SERVER_PORT: 8000
+  APP_ENV: test
+
+env:
+  APP_ENV: '{{.APP_ENV}}'
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  # --- Dependencies ---
+
+  composer:install:
+    desc: Install PHP dependencies (including sylius/test-application)
+    cmds:
+      - composer install --no-interaction
+
+  playwright:install:
+    desc: Install Playwright browsers and Node bridge dependencies
+    cmds:
+      - vendor/bin/playwright-install --browsers
+
+  # --- Database (MariaDB via docker-compose.yml) ---
+
+  db:up:
+    desc: Start MariaDB in Docker
+    cmds:
+      - docker compose up -d
+
+  db:down:
+    desc: Stop MariaDB container
+    cmds:
+      - docker compose down
+
+  db:reset:
+    desc: Drop, recreate, migrate, and load Sylius fixtures
+    cmds:
+      - bin/console doctrine:database:drop --force --if-exists
+      - bin/console doctrine:database:create --if-not-exists
+      - bin/console doctrine:migrations:migrate -n
+      - bin/console sylius:fixtures:load -n
+
+  # --- Frontend (Sylius TestApplication webpack assets) ---
+
+  frontend:install:
+    desc: Install Yarn dependencies in the test application
+    dir: '{{.TEST_APP_DIR}}'
+    cmds:
+      - yarn install
+
+  frontend:build:
+    desc: Build webpack assets (development)
+    dir: '{{.TEST_APP_DIR}}'
+    deps:
+      - frontend:install
+    cmds:
+      - yarn build
+
+  frontend:build:prod:
+    desc: Build webpack assets (production, matches CI)
+    dir: '{{.TEST_APP_DIR}}'
+    deps:
+      - frontend:install
+    cmds:
+      - yarn build:prod
+
+  frontend:
+    desc: Build frontend assets and install them into public/
+    deps:
+      - frontend:build
+    cmds:
+      - bin/console assets:install
+
+  # --- Web server ---
+
+  server:start:
+    desc: Start Symfony local web server for Behat (background)
+    cmds:
+      - symfony server:start --port={{.SERVER_PORT}} --dir={{.TEST_APP_DIR}}/public --daemon --no-tls
+
+  server:stop:
+    desc: Stop Symfony local web server
+    cmds:
+      - symfony server:stop
+
+  # --- Behat ---
+
+  behat:
+    desc: Run Behat scenarios
+    cmds:
+      - php -d memory_limit=512M vendor/bin/behat -c {{.BEHAT_CONFIG}} --colors --strict --no-interaction -vvv -f progress
+
+  behat:rerun:
+    desc: Re-run only failed Behat scenarios from the last run
+    cmds:
+      - php -d memory_limit=512M vendor/bin/behat -c {{.BEHAT_CONFIG}} --colors --strict --no-interaction -vvv -f progress --rerun
+
+  behat:dry-run:
+    desc: Validate Behat configuration and step definitions without running scenarios
+    cmds:
+      - php -d memory_limit=512M vendor/bin/behat -c {{.BEHAT_CONFIG}} --dry-run
+
+  # --- Composite workflows ---
+
+  test-app:init:
+    desc: Full local test-app setup (DB + frontend assets)
+    deps:
+      - db:reset
+      - frontend
+
+  setup:
+    desc: First-time setup (composer, Playwright, MariaDB, DB, frontend)
+    cmds:
+      - task: composer:install
+      - task: playwright:install
+      - task: db:up
+      - task: test-app:init
+
+  test:
+    desc: Run Behat with server (start server, run tests, stop server)
+    cmds:
+      - task: server:start
+      - defer: { task: server:stop }
+      - task: behat
