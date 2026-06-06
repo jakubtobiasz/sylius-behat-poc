@@ -75,6 +75,10 @@ jobs:
                     browsers: chromium
 
             -
+                name: Install Playwright browsers
+                run: vendor/bin/playwright-install --browsers
+
+            -
                 name: Setup Node
                 uses: actions/setup-node@v4
                 with:
