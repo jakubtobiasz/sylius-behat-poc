@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Alphpaca\SyliusBehat\Context\Ui\Shop\HomepageContext;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $container): void {
@@ -10,13 +9,10 @@ return static function (ContainerConfigurator $container): void {
         return;
     }
 
-    $container->import(__DIR__ . '/../../../config/services/pages.php');
-    $container->import(__DIR__ . '/../../../config/services/behat.php');
+    $servicesDir = __DIR__ . '/../../../config/services';
 
-    $container->services()
-        ->set(HomepageContext::class)
-        ->public()
-        ->autowire()
-        ->tag('fob.context_service')
-    ;
+    $container->import($servicesDir . '/behat.php');
+    $container->import($servicesDir . '/shared.php');
+    $container->import($servicesDir . '/admin.php');
+    $container->import($servicesDir . '/shop.php');
 };

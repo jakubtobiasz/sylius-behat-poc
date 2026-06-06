@@ -7,9 +7,9 @@ default:
             paths:
                 - '%paths.base%/tests/TestApplication/features'
             contexts:
-                - Alphpaca\SyliusBehat\Context\Setup\AdminSecurityContext
-                - Alphpaca\SyliusBehat\Context\Ui\Admin\DashboardContext
-                - Alphpaca\SyliusBehat\Context\Ui\Shop\HomepageContext
+                - Alphpaca\SyliusBehat\System\Context\AdminSecurityContext
+                - Alphpaca\SyliusBehat\Admin\Context\Ui\DashboardContext
+                - Alphpaca\SyliusBehat\Shop\Context\Ui\HomepageContext
 
     extensions:
         Behat\MinkExtension:
@@ -28,4 +28,4 @@ default:
                 class: Sylius\TestApplication\Kernel
                 environment: test
 
-        Alphpaca\SyliusBehat\Extension\SyliusBehatExtension: ~
+        Alphpaca\SyliusBehat\Behat\Extension\SyliusBehatExtension: ~

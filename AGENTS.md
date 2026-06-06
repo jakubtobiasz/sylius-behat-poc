@@ -34,7 +34,7 @@ sylius-behat/
 
 ### Playwright driver registration
 
-- `Alphpaca\SyliusBehat\Extension\SyliusBehatExtension` registers `PlaywrightDriverFactory` with `Behat\MinkExtension` during `initialize()`.
+- `Alphpaca\SyliusBehat\Behat\SyliusBehatExtension` registers `PlaywrightDriverFactory` with `Behat\MinkExtension` during `initialize()`.
 - Driver key in Behat config: **`playwright`** (javascript-capable session).
 - Factory class: `Alphpaca\SyliusBehat\Driver\Factory\PlaywrightDriverFactory`.
 - Underlying driver: `Playwright\Mink\Driver\PlaywrightDriver`.
@@ -79,7 +79,7 @@ extensions:
                 playwright:
                     browser_type: chromium
                     headless: true
-    Alphpaca\SyliusBehat\Extension\SyliusBehatExtension: ~
+    Alphpaca\SyliusBehat\Behat\SyliusBehatExtension: ~
 ```
 
 `@javascript` scenarios use the `playwright` session.

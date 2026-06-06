@@ -54,7 +54,7 @@ default:
             kernel:
                 environment: test
 
-        Alphpaca\SyliusBehat\Extension\SyliusBehatExtension: ~
+        Alphpaca\SyliusBehat\Behat\SyliusBehatExtension: ~
 ```
 
 Tag scenarios that need a real browser with `@javascript`. Mink will switch to the `playwright` session automatically.

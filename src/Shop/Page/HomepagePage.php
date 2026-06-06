@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Page\Shop;
+namespace Alphpaca\SyliusBehat\Shop\Page;
 
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 

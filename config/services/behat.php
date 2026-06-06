@@ -4,44 +4,25 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Alphpaca\SyliusBehat\Context\Setup\AdminSecurityContext;
-use Alphpaca\SyliusBehat\Context\Ui\Admin\DashboardContext;
-use Alphpaca\SyliusBehat\Service\SecurityService;
-use Alphpaca\SyliusBehat\Service\Setter\CookieSetter;
-use Alphpaca\SyliusBehat\Service\Setter\CookieSetterInterface;
+use FriendsOfBehat\PageObjectExtension\Page\Page;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
-    $services->set(CookieSetterInterface::class, CookieSetter::class)
+    $services->set('alphpaca.behat.page', Page::class)
+        ->abstract()
         ->args([
             service('behat.mink.default_session'),
             service('behat.mink.parameters'),
         ])
     ;
 
-    $services->set('alphpaca.behat.admin_security', SecurityService::class)
+    $services->set('alphpaca.behat.symfony_page', SymfonyPage::class)
+        ->abstract()
+        ->parent('alphpaca.behat.page')
         ->args([
-            service('request_stack'),
-            service(CookieSetterInterface::class),
-            'admin',
-            service('session.factory')->nullOnInvalid(),
+            service('router'),
         ])
-    ;
-
-    $services->set(AdminSecurityContext::class)
-        ->args([
-            service('alphpaca.behat.admin_security'),
-            service('sylius.repository.admin_user'),
-        ])
-        ->public()
-        ->autowire(false)
-        ->tag('fob.context_service')
-    ;
-
-    $services->set(DashboardContext::class)
-        ->public()
-        ->autowire()
-        ->tag('fob.context_service')
     ;
 };

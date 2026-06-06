@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Service;
+namespace Alphpaca\SyliusBehat\Shared\Service;
 
-use Alphpaca\SyliusBehat\Service\Setter\CookieSetterInterface;
+use Alphpaca\SyliusBehat\Shared\Service\Setter\CookieSetterInterface;
 use Sylius\Component\User\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Context\Ui\Admin;
+namespace Alphpaca\SyliusBehat\Admin\Context\Ui;
 
-use Alphpaca\SyliusBehat\Page\Admin\DashboardPage;
+use Alphpaca\SyliusBehat\Admin\Page\DashboardPage;
 use Behat\Behat\Context\Context;
 
 final class DashboardContext implements Context

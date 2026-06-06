@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Context\Ui\Shop;
+namespace Alphpaca\SyliusBehat\Shop\Context;
 
-use Alphpaca\SyliusBehat\Page\Shop\HomepagePage;
+use Alphpaca\SyliusBehat\Shop\Page\HomepagePage;
 use Behat\Behat\Context\Context;
 
 final class HomepageContext implements Context

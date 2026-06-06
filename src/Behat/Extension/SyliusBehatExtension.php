@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Extension;
+namespace Alphpaca\SyliusBehat\Behat\Extension;
 
-use Alphpaca\SyliusBehat\Driver\Factory\PlaywrightDriverFactory;
+use Alphpaca\SyliusBehat\Behat\Driver\Factory\PlaywrightDriverFactory;
 use Behat\MinkExtension\ServiceContainer\MinkExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;

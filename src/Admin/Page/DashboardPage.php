@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Page\Admin;
+namespace Alphpaca\SyliusBehat\Admin\Page;
 
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 

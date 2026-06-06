@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Context\Setup;
+namespace Alphpaca\SyliusBehat\Admin\Context;
 
-use Alphpaca\SyliusBehat\Service\SecurityService;
+use Alphpaca\SyliusBehat\Shared\Service\SecurityService;
 use Behat\Behat\Context\Context;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
 use Webmozart\Assert\Assert;
 
-final class AdminSecurityContext implements Context
+final class SecurityContext implements Context
 {
     public function __construct(
         private readonly SecurityService $adminSecurity,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alphpaca\SyliusBehat\Service\Setter;
+namespace Alphpaca\SyliusBehat\Shared\Service\Setter;
 
 use Playwright\Browser\BrowserContextInterface;
 use Playwright\Mink\Driver\PlaywrightDriver;
