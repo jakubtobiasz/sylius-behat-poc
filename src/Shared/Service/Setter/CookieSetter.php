@@ -60,42 +60,7 @@ final class CookieSetter implements CookieSetterInterface
         }
 
         if ($driver instanceof PlaywrightDriver && !$driver->isStarted()) {
-            // #region agent log
-            $debugLogPath = dirname(__DIR__, 4) . '/.cursor/debug-2cf8dc.log';
-            file_put_contents($debugLogPath, json_encode([
-                'sessionId' => '2cf8dc',
-                'runId' => 'pre-fix',
-                'hypothesisId' => 'D',
-                'location' => 'CookieSetter.php:prepareMinkSessionIfNeeded',
-                'message' => 'About to start PlaywrightDriver',
-                'data' => [
-                    'driverClass' => $driver::class,
-                    'isStarted' => $driver->isStarted(),
-                    'path' => getenv('PATH'),
-                ],
-                'timestamp' => (int) round(microtime(true) * 1000),
-            ], JSON_THROW_ON_ERROR) . "\n", FILE_APPEND);
-            // #endregion
-            try {
-                $driver->start();
-            } catch (\Throwable $e) {
-                // #region agent log
-                file_put_contents($debugLogPath, json_encode([
-                    'sessionId' => '2cf8dc',
-                    'runId' => 'pre-fix',
-                    'hypothesisId' => 'E',
-                    'location' => 'CookieSetter.php:prepareMinkSessionIfNeeded',
-                    'message' => 'PlaywrightDriver start failed',
-                    'data' => [
-                        'exceptionClass' => $e::class,
-                        'exceptionMessage' => $e->getMessage(),
-                        'previousMessage' => $e->getPrevious()?->getMessage(),
-                    ],
-                    'timestamp' => (int) round(microtime(true) * 1000),
-                ], JSON_THROW_ON_ERROR) . "\n", FILE_APPEND);
-                // #endregion
-                throw $e;
-            }
+            $driver->start();
         }
 
         $baseUrl = rtrim((string) $this->minkParameters['base_url'], '/');
